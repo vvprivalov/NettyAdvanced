@@ -40,27 +40,27 @@ public class Client {
                                     new SimpleChannelInboundHandler<Message>() {
                                         @Override
                                         protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
-                                            System.out.println("receive msg " + msg);
+                                            System.out.println("Полученное сообщение: " + msg);
                                         }
                                     }
                             );
                         }
                     });
 
-            System.out.println("Client started");
+            System.out.println("Клиент стартовал");
 
             Channel channel = bootstrap.connect("localhost", 9000).sync().channel();
 
             while (channel.isActive()) {
                 TextMessage textMessage = new TextMessage();
                 textMessage.setText(String.format("[%s] %s", LocalDateTime.now(), Thread.currentThread().getName()));
-                System.out.println("Try to send message: " + textMessage);
+                System.out.println("Пробую отправить сообщение: " + textMessage);
                 channel.writeAndFlush(textMessage);
 
                 DateMessage dateMessage = new DateMessage();
                 dateMessage.setDate(new Date());
                 channel.write(dateMessage);
-                System.out.println("Try to send message: " + dateMessage);
+                System.out.println("Пробую отправить сообщение: " + dateMessage);
                 channel.flush();
                 Thread.sleep(3000);
             }

@@ -2,6 +2,7 @@ package client;
 
 import common.handler.JsonDecoder;
 import common.handler.JsonEncoder;
+import common.message.AuthMessage;
 import common.message.DateMessage;
 import common.message.Message;
 import common.message.TextMessage;
@@ -62,7 +63,14 @@ public class Client {
                 channel.write(dateMessage);
                 System.out.println("Пробую отправить сообщение: " + dateMessage);
                 channel.flush();
+
+                AuthMessage auth = new AuthMessage();
+                auth.setLogin("Vitaliy");
+                auth.setPassword("pass12345");
+                channel.writeAndFlush(auth);
+                System.out.println("Отправил сообщение об аутентификации");
                 Thread.sleep(3000);
+
             }
 
             channel.closeFuture().sync();

@@ -1,10 +1,12 @@
 package server;
 
+import common.message.AuthMessage;
 import common.message.DateMessage;
 import common.message.Message;
 import common.message.TextMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.sctp.SctpOutboundByteStreamHandler;
 
 
 public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
@@ -26,6 +28,11 @@ public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
         if (msg instanceof DateMessage) {
             DateMessage message = (DateMessage) msg;
             System.out.println("Входящее сообщение типа Дата: " + message.getDate());
+            ctx.writeAndFlush(msg);
+        }
+        if (msg instanceof AuthMessage) {
+            AuthMessage auth = (AuthMessage) msg;
+            System.out.println("[ Логин: " + auth.getLogin() + "]   [ Пароль: " + auth.getPassword() + " ]");
             ctx.writeAndFlush(msg);
         }
     }

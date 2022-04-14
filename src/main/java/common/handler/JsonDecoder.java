@@ -10,13 +10,14 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class JsonDecoder extends MessageToMessageDecoder<ByteBuf> {
+public class JsonDecoder extends MessageToMessageDecoder<String> {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final byte[] bytes = ByteBufUtil.getBytes(msg);
+    protected void decode(ChannelHandlerContext ctx, String msg, List<Object> out) throws Exception {
+        final byte[] bytes = msg.getBytes(StandardCharsets.UTF_8);
         Message message = OBJECT_MAPPER.readValue(bytes, Message.class);
+        System.out.println("Конвертация объекта типа String в объект типа Message");
         out.add(message);
     }
 }

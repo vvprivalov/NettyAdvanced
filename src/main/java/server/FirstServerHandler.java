@@ -12,7 +12,7 @@ import io.netty.handler.codec.sctp.SctpOutboundByteStreamHandler;
 public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("Новый канад активирован");
+        System.out.println("Новый канал активирован");
         TextMessage answer = new TextMessage();
         answer.setText("Успешное соединение");
         ctx.writeAndFlush(answer);
@@ -32,7 +32,7 @@ public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
         }
         if (msg instanceof AuthMessage) {
             AuthMessage auth = (AuthMessage) msg;
-            System.out.println("[ Логин: " + auth.getLogin() + "]   [ Пароль: " + auth.getPassword() + " ]");
+            System.out.println("Входящее сообщение типа Auth: [ Логин: " + auth.getLogin() + "] [ Пароль: " + auth.getPassword() + " ]");
             ctx.writeAndFlush(msg);
         }
     }
@@ -45,6 +45,7 @@ public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println("client disconnect");
+
+        System.out.println("Клиент отключился");
     }
 }

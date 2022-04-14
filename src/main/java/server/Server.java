@@ -22,6 +22,7 @@ public class Server {
     }
 
     public Server(int port) {
+
         this.port = port;
     }
 
@@ -39,11 +40,11 @@ public class Server {
                             ch.pipeline().addLast(
                                     new LengthFieldBasedFrameDecoder(1024 * 1024, 0, 3, 0, 3),
                                     new LengthFieldPrepender(3),
+                                    new StringDecoder(),
+                                    new StringEncoder(),
                                     new JsonDecoder(),
                                     new JsonEncoder(),
                                     new FirstServerHandler());
-                            //in -> LineBasedFrameDecoder -> JsonDecoder -> FirstServerHandler
-                            //JsonEncoder -> LengthFieldPrepender -> out
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)
@@ -51,7 +52,7 @@ public class Server {
 
             ChannelFuture future = server.bind(port).sync();
 
-            System.out.println("Server started");
+            System.out.println("Сервер стартовал");
             future.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
